@@ -1,5 +1,8 @@
 # Ops_platform
 ops_platform_django_arch
+
+# python  django 框架
+
 1
 仪表盘
 CMDB管理
