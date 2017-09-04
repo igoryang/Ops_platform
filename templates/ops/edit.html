@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        配置项编辑（{{ci_name}}：{{ci_id}}）
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div id="config" class="col-sm-12">
+                {{ci_config}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+<script>
+
+    function checkIp(ip) {
+        var regIps = /^(((25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|[0-9])\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|[0-9]))$/;
+        return regIps.test(ip);
+    }
+    function isContains(str,substr) {
+        return new RegExp(substr).test(str);
+    }
+    String.prototype.startWith=function(str){
+        var reg=new RegExp("^"+str);
+        return reg.test(this);
+    };
+
+    var saveInfo = function(){
+        var saveData = {};
+        saveData['service_type'] = "";
+        $("#config :input").each(function(a,target){
+            var name = $(target).attr("name");//获取name属性
+            var value = $(target).val();
+            if (name != undefined && name.startWith('service_type_')) {
+                if ($(target).context.checked) {
+                    if (saveData['service_type'] != "") {
+                        saveData['service_type'] += "," + name;
+                    } else {
+                        saveData['service_type'] = name;
+                    }
+                }
+                return;
+            }
+
+            if (name != undefined) {
+                saveData[name] = value;
+            }
+        });
+        var ip = saveData['private_ip'];
+        if(ip){
+            var ret = checkIp(ip);
+            if(!ret){
+                swal('IP地址格式不正确');
+                return
+            }
+        }
+        var bu_en_name = saveData['bu_en_name'];
+        if(bu_en_name){
+            var result = isContains(bu_en_name, '_');
+            if(result){
+                swal('业务英文名不能包含下划线');
+                return
+            }
+        }
+        $.ajax({
+            url: "/cmdb/ci/edit/saveInfo",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    swal("配置成功");
+                }else{
+                    swal(data.message);
+                }
+            }
+        });
+    };
+    jQuery(function($){
+    });
+</script>
+{% endblock %}

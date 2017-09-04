@@ -1,0 +1,346 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        HAProxy集群
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                HAProxy集群名称:{{ci.ha_group_name}}
+            </div>
+            <div class="col-xs-6">
+                虚IP:{{ci.ha_visual_ip}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    HAProxy服务器列表
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_vserver" class="width-50 select2 user-select2" data-placeholder="选择需要添加关联的虚拟机IP" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}}, 'new_vserver', 'ha_group')">新增关联</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 100px;">IP地址</th>
+                            <th style="text-align: center; width: 100px;">环境</th>
+                            <th style="text-align: center;">操作系统</th>
+                            <th style="text-align: center; width: 120px;">内存</th>
+                            <th style="text-align: center; width: 120px;">硬盘</th>
+                            <th style="text-align: center; width: 195px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vserver in vservers %}
+                        <tr ng-repeat="record in records">
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.private_ip[0]}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.env}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.os_version}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.ram}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.harddisk}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showRelation({{vserver._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{vserver._id}})">删除关联</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="edit({{vserver._id}})">编辑</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    HAProxy配置列表
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-3">
+                <input class="form-control" id="new_ha_config_name" placeholder="输入配置名称">
+            </div>
+            <div class="col-xs-3">
+                <select id="new_domain" class="width-100 select2 user-select2" data-placeholder="选择域名" >
+                </select>
+            </div>
+            <div class="col-xs-3">
+                <input class="form-control" id="new_ha_config_port" placeholder="输入配置端口">
+            </div>
+            <div class="col-xs-3">
+                <input class="form-control" id="new_ha_config_path" placeholder="输入配置路径">
+            </div>
+            <div class="col-xs-12" style="margin-top: 5px;">
+                <select id="new_project_vserver" class="width-75 select2 user-select2" multiple="multiple" data-placeholder="选择与配置相关的虚拟机IP" >
+                </select>
+                <button class="btn btn-xs btn-success" style="margin-left: 15px;"
+                    onclick="createHaProxyConfig({{ci_id}})">新增HAProxy配置</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 80px;">id</th>
+                            <th style="text-align: center; width: 200px;">配置名称</th>
+                            <th style="text-align: center; width: 50px;">端口</th>
+                            <th style="text-align: center; width: 170px;">路径</th>
+                            <th style="text-align: center; width: 110px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for config in ha_configs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{config._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{config.ha_config_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{config.ha_config_port}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{config.ha_config_path}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showConfigRelation({{config._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="editConfig({{config._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteConfig({{config._id}})">删除配置</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    操作日志
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px;">ID</th>
+                            <th style="text-align: center; width: 200px;">操作者</th>
+                            <th style="text-align: center; width: 120px;">操作类型</th>
+                            <th style="text-align: center; width: 150px;">操作时间</th>
+                            <th style="text-align: center;">详细信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.operator}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.command}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.create_time}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.content}}</div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="/static/js/select2.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script>
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=vserver&id=" + ciId);
+    };
+    var editConfig = function(ciId){
+        window.open("/cmdb/ci/edit?type=ha_config&id=" + ciId);
+    };
+    var createHaProxyConfig = function(haProxyGroupId){
+        var saveData = {
+            'group_id': haProxyGroupId,
+            'name': $('#new_ha_config_name').val(),
+            'domain': $('#new_domain').val(),
+            'port': $('#new_ha_config_port').val(),
+            'vservers': $('#new_project_vserver').val(),
+            'path': $('#new_ha_config_path').val()
+        };
+        $.ajax({
+            url: "/cmdb/haConfig/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=vserver&id=" + ciId);
+    };
+    var showConfigRelation = function(ciId){
+        window.open("/cmdb/relation?type=ha_config&id=" + ciId);
+    };
+    var createRelation = function(first_id, input_id, relation_type){
+        var saveData = {
+            'first_id': first_id,
+            'second_id': $('#' + input_id).val(),
+            'type': relation_type
+        };
+        $.ajax({
+            url: "/cmdb/relation/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var deleteRelation = function(first_id, second_id){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    };
+    var deleteConfig = function(ciId){
+        ret = window.confirm("确认要删除配置?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {"id": '' + ciId};
+        $.ajax({
+            url: "/cmdb/ci/edit/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除失败");
+                }
+            }
+        });
+    };
+    var select2_option = {
+        ajax: {
+            url: "/cmdb/query/selectVserver",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    var select_domain = {
+        ajax: {
+            url: "/cmdb/query/selectDomain",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $("#new_vserver").select2(select2_option);
+    $("#new_domain").select2(select_domain);
+    $("#new_project_vserver").select2(select2_option);
+
+    jQuery(function($){
+    });
+</script>
+{% endblock %}

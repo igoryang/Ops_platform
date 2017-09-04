@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery.mloading.css">
+{% endblock %}
+{% block main %}
+<div class="page-header">
+    <h1>
+        数据导出
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="dialog-alert" class="hide">
+            <div class="space-6"></div>
+            <p id="dialog-text" class="bigger-110 bolder center grey">
+                <i class="icon-hand-right blue bigger-120"></i>
+            </p>
+        </div><!-- #dialog-confirm -->
+        <div>
+            <nav class="navbar-default" style="border: 1px solid transparent;border-color: #e7e7e7;">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="loading">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header" style="margin-right: 18px;">
+                            <span class="navbar-brand">配置项</span>
+                        </div>
+                        <div class="nav navbar-nav form-group">
+                            <div class="navbar-form navbar-left">
+                                <div class="form-group">
+                                    <select id="ci" style="width:150px;" class="form-control" >
+                                        {% for ci in cis %}
+                                        <option value="{{ci.type_id}}">{{ci.type_alias}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="navbar-nav" style="margin-top: 7px">
+                            <button class="btn btn-sm btn-success" onclick="exportData()"><i class="icon-ok"></i>导出</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/jquery.dataTables.bootstrap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+<script src="/static/js/jquery.mloading.js"></script>
+<script>
+    function exportData() {
+        $('#loading').mLoading({text:"导出中..."});
+        var obj = $('#ci');
+        var ci_type_id = obj.val();
+        var ci_type_alias = obj.find("option:selected").text();
+        if(ci_type_id=="-1"){
+            swal("请选择配置项");
+            return
+        }
+        $.ajax({
+            url:"/cmdb/export/exportData",
+            type:"post",
+            data:JSON.stringify({"ci_type_id": ci_type_id, "ci_type_alias": ci_type_alias}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $('#loading').mLoading("hide");
+                if(data.status){
+                    window.open("/util/export/" + data.filename)
+                }else {
+                    swal(data.message)
+                }
+            }
+
+        })
+    }
+</script>
+{% endblock %}

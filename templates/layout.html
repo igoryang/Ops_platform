@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>订单管理系统</title>
+    <!--大迈仪器(Strider Instruments)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- basic styles  -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css"/>
+    <link href="/static/images/cat_favicon.ico" rel="shortcut icon">
+
+    <!--[if IE 7]>
+		  <link rel="stylesheet" href="/static/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.10.3.full.min.css"/>
+    <!-- fonts -->
+    <link rel="stylesheet" href="/static/css/select2.css"/>
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="/static/css/ace.min.css"/>
+    <link rel="stylesheet" href="/static/css/dataTables.bootstrap.css"/>
+    <link rel="stylesheet" href="/static/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="/static/css/ace-skins.min.css"/>
+
+    <!--[if lte IE 8]>
+		<link rel="stylesheet" href="/static/css/ace-ie.min.css" />
+		<![endif]-->
+
+    {% block css %}
+    {% endblock %}
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+
+    <script src="/static/js/ace-extra.min.js"></script>
+
+</head>
+
+<body>
+<div class="navbar navbar-default" id="navbar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <a href="http://www.strider-tech.com/index.htm" class="navbar-brand">
+                <small>
+                    <i class="icon-fire"></i>
+                    订单管理系统
+                </small>
+                <!--大迈仪器(Strider Instruments)-->
+            </a><!-- /.brand -->
+        </div><!-- /.navbar-header -->
+        <div class="navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li>&nbsp;
+                    <img src="/static/images/banshou.png" class="img-rounded" witdth="24" height="24">&nbsp;
+                </li>
+                <li>
+                    <p class="text-center">  杨岗 &nbsp;&nbsp;  </p>
+                </li>
+                {#                <li class="light-blue">#}
+                {#                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">#}
+                {#								<span class="user-info">#}
+                {#									<small>欢迎光临,</small>#}
+                {#									{{ session.lat_name }}#}
+                {#								</span>#}
+                {##}
+                {#                        <i class="icon-caret-down"></i>#}
+                {#                    </a>#}
+                {##}
+                {#                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">#}
+                {#                        <li>#}
+                {#                            <a href="/login/logout">#}
+                {#                                <i class="icon-off"></i>#}
+                {#                                退出#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+            </ul><!-- /.ace-nav -->
+        </div><!-- /.navbar-header -->
+
+    </div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+    <div class="main-container-inner">
+        <div class="sidebar" id="sidebar">
+            <ul class="nav nav-list">
+                <li {% if '/order_cmdb' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 订单管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/order_cmdb/index' %}class="active" {% endif %}>
+                            <a href="/order_cmdb/index">
+                                <i class="icon-double-angle-right"></i>
+                                订单管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/order_cmdb/orderaccount' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                               订单统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-list">
+                <li {% if '/product' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 产品管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/product/index' %}class="active" {% endif %}>
+                            <a href="/product/index">
+                                <i class="icon-double-angle-right"></i>
+                                产品管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/product/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                产品统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+                        <ul class="nav nav-list">
+                <li {% if '/customer' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 客户管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/customer/vminstances' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                客户管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/customer/host' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                客户统计
+                            </a>
+                        </li>
+                        <li {% if request.path == '/customer/help' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                帮助文档
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+                   data-icon2="icon-double-angle-right"></i>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="page-content">
+                {% block main %}
+                {% endblock %}
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content -->
+    </div><!-- /.main-container-inner -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div><!-- /.main-container -->
+
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+<script src="/static/js/jquery-2.0.3.min.js"></script>
+
+<!-- <![endif]-->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='/static/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+</script>
+
+<script type="text/javascript">
+    if ("ontouchend" in document) document.write("<script src='/static/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+</script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/typeahead-bs2.min.js"></script>
+
+
+<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/jquery.slimscroll.min.js"></script>
+<script src="/static/js/jquery.easy-pie-chart.min.js"></script>
+<script src="/static/js/jquery.sparkline.min.js"></script>
+<script src="/static/js/flot/jquery.flot.min.js"></script>
+<script src="/static/js/flot/jquery.flot.pie.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/flot/jquery.flot.resize.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="/static/js/ace-elements.min.js"></script>
+<script src="/static/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+{% block script %}
+{% endblock %}
+</body>
+</html>
+
+

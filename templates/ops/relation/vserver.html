@@ -1,0 +1,288 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        虚拟机关联应用
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                ID:{{ci._id}}
+            </div>
+            <div class="col-xs-6">
+                IP地址:{{ci.private_ip[0]}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                环境:{{ci.env}}
+            </div>
+            <div class="col-xs-6">
+                操作系统:{{ci.os_version}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                内存:{{ci.ram}}
+            </div>
+            <div class="col-xs-6">
+                硬盘:{{ci.harddisk}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    应用列表
+                </span>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_project" class="width-50 select2 user-select2" data-placeholder="选择需要添加关联的应用" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}})">新增关联</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 300px;">系统别名</th>
+                            <th style="text-align: center; width: 100px;">开发负责人</th>
+                            <th style="text-align: center;">应用描述</th>
+                            <th style="text-align: center; width: 195px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for first_ci in first_cis %}
+                        <tr ng-repeat="record in records">
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci.project_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci.rd_duty}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci.desc}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showRelation({{first_ci._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="edit({{first_ci._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{first_ci._id}},{{ci_id}})">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    物理服务器信息
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 200px;">物理IP</th>
+                            <th style="text-align: center; width: 100px;">CPU</th>
+                            <th style="text-align: center; width: 100px;">内存</th>
+                            <th style="text-align: center;">制造商</th>
+                            <th style="text-align: center; width: 230px;">设备类型</th>
+                            <th style="text-align: center; width: 180px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for second_ci in second_cis %}
+                        <tr ng-repeat="record in records">
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.private_ip[0]}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.cpu_count}} Core</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.ram_size}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.manufacturer}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.device_spec}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                        <button class="btn btn-xs btn-success"
+                                            onclick="showRelation_server({{second_ci._id}})">关联关系</button>
+                                <button class="btn btn-xs btn-danger"
+                                            onclick="delRelationPhysicalServer({{ ci_id }},{{second_ci._id}})">删除关联</button>
+                                    </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    操作日志
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px;">ID</th>
+                            <th style="text-align: center; width: 200px;">操作者</th>
+                            <th style="text-align: center; width: 120px;">操作类型</th>
+                            <th style="text-align: center; width: 150px;">操作时间</th>
+                            <th style="text-align: center;">详细信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.operator}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.command}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.create_time}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.content}}</div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="/static/js/select2.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script>
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=project&id=" + ciId);
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=project&id=" + ciId);
+    };
+    var showRelation_server = function(ciId){
+        window.open("/cmdb/relation?type=server&id=" + ciId);
+    };
+    var createRelation = function(first_id){
+        var saveData = {
+            'first_id': $('#new_project').val(),
+            'second_id': first_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var deleteRelation = function(first_id, second_id){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    };
+    function delRelationPhysicalServer(first_id, second_id){
+        ret = window.confirm("确认要删除关联关系?");
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/delRelationPhysicalServer",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    }
+    var select2_option = {
+        ajax: {
+            url: "/cmdb/query/selectProject",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $("#new_project").select2(select2_option);
+    jQuery(function($){
+    });
+</script>
+{% endblock %}

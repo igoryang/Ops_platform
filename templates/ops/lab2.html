@@ -1,0 +1,150 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        机房管理
+        <button class="btn btn-sm btn-success" onclick="create()"><i class="icon-ok"></i>新增</button>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="dialog-alert" class="hide">
+            <div class="space-6"></div>
+            <p id="dialog-text" class="bigger-110 bolder center grey">
+                <i class="icon-hand-right blue bigger-120"></i>
+            </p>
+        </div><!-- #dialog-confirm -->
+        <div class="table-header">
+            机房列表
+        </div>
+        <div class="table-responsive">
+            <table id="tables" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>机房名称</th>
+                    <th>机房描述</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/jquery.dataTables.bootstrap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+<script>
+    var create = function(ciId){
+        window.open("/cmdb/ci/add?type=lab");
+    };
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=lab&id=" + ciId);
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=lab&id=" + ciId);
+    };
+    var deleteInfo = function(ciId){
+        ret = window.confirm("确认要删除机房?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {"id": ciId};
+        $.ajax({
+            url: "/cmdb/ci/edit/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    $('#tables').DataTable().fnDraw();
+                    swal("删除成功");
+                }else{
+                    swal("删除失败");
+                }
+            }
+        });
+    };
+    $(document).ready(function () {
+        var tableConfig = jQuery.extend(DATATABLE_CONFIG, {
+            "aoColumns": [
+                {
+                    "mDataProp": "_id",
+                    "sWidth": "null"
+                },
+                {
+                    "mDataProp": "lab_name",
+                    "sWidth": "null"
+                },
+                {
+                    "mDataProp": "lab_desc",
+                    "sWidth": "null"
+                },
+                {
+                    "sWidth": "180px"
+                }
+            ],
+            "aoColumnDefs": [
+                {
+                    "aTargets": [3],  // this your column of action
+                    "mData": null,
+                    "mRender": function (data, type, full) {
+                        var result = '<div style="width:180px;" class="visible-md visible-lg hidden-sm hidden-xs btn-group">';
+                        result += '<button class="btn btn-xs btn-success" onclick="showRelation([' + full._id + '], 0)">' +
+                                    '<i class="icon-edit"></i>关联关系' +
+                                    '</button>';
+                        result += '<button class="btn btn-xs btn-primary" onclick="edit([' + full._id + '], 0)">' +
+                                    '<i class="icon-edit"></i>编辑' +
+                                    '</button>';
+                        result += '<button class="btn btn-xs btn-danger" onclick="deleteInfo(\'' + full._id + '\')">' +
+                                    '<i class="icon-ban-circle bigger-120"></i>删除' +
+                                    '</button>' +
+                                    '</div>';
+                        return result;
+                    }
+                }
+            ],
+            "sAjaxSource": "getList",
+            "fnServerParams": function (aoData) {
+            },
+            "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+                oSettings.jqXHR = $.ajax( {
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    //"success": fnCallback,
+                    "success": function(data){
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                            return;
+                        }
+                        fnCallback(data.data);
+                    },
+                    "error": function (e) {
+                        showDialog("查询失败", e.message);
+                    }
+                });
+            }
+        });
+        $('#tables').dataTable(tableConfig);
+    });
+</script>
+{% endblock %}

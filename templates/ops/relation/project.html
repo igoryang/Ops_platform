@@ -1,0 +1,552 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        应用关联虚拟机
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-4">
+                系统别名:{{ci.project_name}}
+            </div>
+            <div class="col-xs-4">
+                开发负责人:{{ci.rd_duty}}
+            </div>
+            <div class="col-xs-4">
+                网络访问策略:{{ci.network_policy}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-4">
+                研发组:{{product_name}}
+            </div>
+            <div class="col-xs-4">
+                应用描述:{{ci.desc}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_vserver" class="width-50 select2 user-select2" data-placeholder="选择需要添加关联的虚拟机或物理机IP" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}}, 'new_vserver', 'contain')">新增关联</button>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    物理机列表
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 100px;">IP地址</th>
+                            <th style="text-align: center; width: 100px;">环境</th>
+                            <th style="text-align: center; width: 100px;">物理CPU数量</th>
+                            <th style="text-align: center; width: 100px;">逻辑CPU数量</th>
+                            <th style="text-align: center; width: 120px;">内存</th>
+                            <th style="text-align: center;">RAID</th>
+                            <th style="text-align: center; width: 195px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for server in servers %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.private_ip[0]}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.env}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.cpu_count}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.logic_cpu_count}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.ram_size}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{server.raid}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showServerRelation({{server._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{server._id}})">删除关联</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="editServer({{server._id}})">编辑</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    虚拟机列表
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                <input class="form-control" placeholder="填写需要新增的虚拟机分组名称" id="new_group" style="width: 517px;"/>
+            </div>
+            <div class="col-xs-6" style="padding-left:5px;padding-top:5px; ">
+                <button class="btn btn-xs btn-success"
+                    onclick="createGroup({{ci_id}})">新增分组</button>
+            </div>
+        </div>
+        {% for group_name in group_names %}
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                {{group_name}}（共{{group_vservers[group_name].vservers|length}}台）
+                {% if group_vservers[group_name].group %}
+                <button class="btn btn-xs btn-danger"
+                    onclick="deleteGroup({{group_vservers[group_name].group._id}})">删除分组</button>
+                <select id="group_vserver_id{{group_vservers[group_name].group._id}}" style="width:150px;">
+                    {% for vserver in group_vservers[default_group].vservers %}
+                    <option value="{{vserver._id}}">{{vserver.private_ip[0]}}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="addToGroup({{group_vservers[group_name].group._id}})">加入分组</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 100px;">IP地址</th>
+                            <th style="text-align: center; width: 100px;">环境</th>
+                            <th style="text-align: center;">操作系统</th>
+                            <th style="text-align: center; width: 70px;">CPU个数</th>
+                            <th style="text-align: center; width: 120px;">内存</th>
+                            <th style="text-align: center; width: 120px;">硬盘</th>
+                            {% if group_vservers[group_name].group %}
+                            <th style="text-align: center; width: 240px;">操作</th>
+                            {% else %}
+                            <th style="text-align: center; width: 195px;">操作</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vserver in group_vservers[group_name].vservers %}
+                        <tr ng-repeat="record in records">
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.private_ip[0]}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.env}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.os_version}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.cpu_count}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.ram}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{vserver.harddisk}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showRelation({{vserver._id}})">关联关系</button>
+                                    {% if not group_vservers[group_name].group %}
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{vserver._id}})">删除关联</button>
+                                    {% endif %}
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="edit({{vserver._id}})">编辑</button>
+                                    {% if group_vservers[group_name].group %}
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteFromGroup({{vserver._id}},{{group_vservers[group_name].group._id}})">从分组删除</button>
+                                    {% endif %}
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    域名列表
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_domain" class="width-50 select2 user-select2" data-placeholder="选择需要添加关联的域名" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}}, 'new_domain', 'domain')">新增域名</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 300px;">域名</th>
+                            <th style="text-align: center; width: 100px;">环境</th>
+                            <th style="text-align: center; width: 110px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for domain in domains %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{domain._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{domain.domain_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{domain.env}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showDomainRelation({{domain._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="editDomain({{domain._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{domain._id}})">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    数据库列表
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_db" class="width-50 select2 user-select2" data-placeholder="选择需要添加关联的数据库名" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}}, 'new_db', 'db')">新增数据库</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 300px;">数据库名</th>
+                            <th style="text-align: center; width: 90px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for db in dbs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{db._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{db.db_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showDbRelation({{db._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="editDomain({{db._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{db._id}})">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    操作日志
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px;">ID</th>
+                            <th style="text-align: center; width: 200px;">操作者</th>
+                            <th style="text-align: center; width: 120px;">操作类型</th>
+                            <th style="text-align: center; width: 150px;">操作时间</th>
+                            <th style="text-align: center;">详细信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.operator}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.command}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.create_time}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.content}}</div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="/static/js/select2.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script>
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=vserver&id=" + ciId);
+    };
+    var editServer = function(ciId){
+        window.open("/cmdb/ci/edit?type=server&id=" + ciId);
+    };
+    var editDomain = function(ciId){
+        window.open("/cmdb/ci/edit?type=domain&id=" + ciId);
+    };
+    var editDb = function(ciId){
+        window.open("/cmdb/ci/edit?type=db&id=" + ciId);
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=vserver&id=" + ciId);
+    };
+    var showServerRelation = function(ciId){
+        window.open("/cmdb/relation?type=server&id=" + ciId);
+    };
+    var showDomainRelation = function(ciId){
+        window.open("/cmdb/relation?type=domain&id=" + ciId);
+    };
+    var showDbRelation = function(ciId){
+        window.open("/cmdb/relation?type=db&id=" + ciId);
+    };
+    var createGroup = function(first_id){
+        var saveData = {
+            'project_id': first_id,
+            'group_name': $('#new_group').val()
+        };
+        $.ajax({
+            url: "/cmdb/group/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("新增分组失败");
+                }
+            }
+        });
+    };
+    var deleteGroup = function(group_id){
+        ret = window.confirm("确认要删除分组?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'group_id': group_id
+        };
+        $.ajax({
+            url: "/cmdb/group/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除分组失败");
+                }
+            }
+        });
+    };
+    var addToGroup = function(group_id){
+        var saveData = {
+            'group_id': group_id,
+            'vserver_id': $('#group_vserver_id' + group_id).val()
+        };
+        $.ajax({
+            url: "/cmdb/group/addVserver",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("分组新增虚拟机失败");
+                }
+            }
+        });
+    };
+    var deleteFromGroup = function(vserver_id,group_id){
+        ret = window.confirm("确认要从分组删除?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'group_id': group_id,
+            'vserver_id': vserver_id
+        };
+        $.ajax({
+            url: "/cmdb/group/deleteVserver",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("分组删除虚拟机失败");
+                }
+            }
+        });
+    };
+    var createRelation = function(first_id, input_id, relation_type){
+        var saveData = {
+            'first_id': first_id,
+            'second_id': $('#' + input_id).val(),
+            'type': relation_type
+        };
+        $.ajax({
+            url: "/cmdb/relation/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var deleteRelation = function(first_id, second_id){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    };
+    var select2_option = {
+        ajax: {
+            url: "/cmdb/query/selectAllServer",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    var select_domain = {
+        ajax: {
+            url: "/cmdb/query/selectDomain",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    var select_db = {
+        ajax: {
+            url: "/cmdb/query/selectDb",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $("#new_vserver").select2(select2_option);
+    $("#new_domain").select2(select_domain);
+    $("#new_db").select2(select_db);
+    jQuery(function($){
+    });
+</script>
+{% endblock %}

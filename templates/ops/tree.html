@@ -1,0 +1,161 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        CMDB管理
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="widget-box">
+                    <div class="widget-header header-color-blue2">
+                        <h4 class="lighter smaller">CMDB树</h4>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main padding-8">
+                            <div id="tree" class="tree"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="widget-box">
+                    <div class="widget-header header-color-green2">
+                        <h4 class="lighter smaller">配置CMDB配置项</h4>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main padding-8">
+                            <div class="row">
+                                <div id="config" class="col-sm-12"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/jquery.dataTables.bootstrap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/fuelux/fuelux.tree.min.js"></script>
+
+<script src="/static/js/all-config.js"></script>
+<script>
+    var saveInfo = function(){
+        var saveData = {};
+        $("#config :input").each(function(a,target){
+            var name = $(target).attr("name");//获取name属性
+            var value = $(target).val();
+            if (name != undefined) {
+                saveData[name] = value;
+            }
+        });
+        $.ajax({
+            url: "/cmdb/tree/saveInfo",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    alert("配置成功");
+                }else{
+                    alert("配置失败");
+                }
+            }
+        });
+    };
+
+    jQuery(function($){
+        var remoteUrl = '/cmdb/tree/getTree' ;//动态树数据请求接口
+
+        var DataSourceTree = function() {
+        };
+
+        DataSourceTree.prototype.data = function(options, callback) {
+            var parent_id = null;
+            if ( !('text' in options || 'type' in options) ){
+                parent_id = 0; //load first level data
+            }
+            else if ('type' in options && options['type' ] == 'folder' ) { //it has children
+                if ('additionalParameters' in options && 'children' in options.additionalParameters)
+                    parent_id = options['id' ]
+            }
+
+            if (parent_id !== null) {
+                $.ajax({
+                    url: remoteUrl,
+                    data: 'id=' +parent_id,
+                    type: 'POST' ,
+                    dataType: 'json' ,
+                    success : function (response) {
+                        if (response.success == true )
+                            callback({ data: response.data });
+                    },
+                    error: function (response) {
+                        //console.log(response);
+                    }
+                });
+            }
+        };
+
+        var remoteDateSource = new DataSourceTree();
+
+		$('#tree').ace_tree({
+			dataSource: remoteDateSource ,
+			multiSelect:false,
+            folderSelect:true,
+			loadingHTML:'<div class="tree-loading"><i class="icon-refresh icon-spin blue"></i></div>',
+			'open-icon' : 'icon-minus',
+			'close-icon' : 'icon-plus',
+			'selectable' : true,
+			'selected-icon' : 'icon-ok',
+			'unselected-icon' : 'icon-lightbulb'
+		});
+
+        var showDetail = function(data){
+            $.ajax({
+                url: '/cmdb/tree/getInfo',
+                data: 'id=' + data.id + '&citype=' + data.ci_type,
+                type: 'POST' ,
+                dataType: 'json' ,
+                success : function (response) {
+                    if (response.success == true )
+                        $('#config').html(response['html']);
+                },
+                error: function (response) {
+                    //console.log(response);
+                }
+            });
+        };
+
+        $('#tree').on('selected', function (event, data) {
+            showDetail(data.info[0]);
+        });
+        $('#tree').on('opened', function (event, data) {
+            showDetail(data);
+        });
+        $('#tree').on('closed', function (event, data) {
+            showDetail(data);
+        });
+    });
+</script>
+{% endblock %}

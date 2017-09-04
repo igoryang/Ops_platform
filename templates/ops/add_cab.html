@@ -1,0 +1,117 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="page-header">
+        <h1>
+            新增机柜
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div id="config" class="col-sm-14">
+                    <form class="form-horizontal" role="form" id="data_form">
+                        <div class="space-16"></div>
+                        <div class="form-group" style="margin-left: 190px">
+                            <label class="col-sm-2 control-label no-padding-right">机房&nbsp;</label>
+                            <div class="col-sm-6 tooltip-info" data-rel="tooltip" data-placement="top">
+                               <select class="col-sm-3" id="lab" name="lab">
+                                   <option value="-1">所有机房</option>
+                                    {% for row in lab %}
+                                        <option value="{{ row._id }}">{{ row.lab_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-16"></div>
+                        <div class="form-group" style="margin-left: 190px">
+                            <label class="col-sm-2 control-label no-padding-right">机柜号&nbsp;</label>
+                            <div class="col-sm-6 tooltip-info" data-rel="tooltip" data-placement="top">
+                                <input id="cab_num" name="cab_num" class="input-sm form-control"
+                                       placeholder="请填写机柜号"/>
+                            </div>
+                        </div>
+                        <div class="space-16"></div>
+                        <div class="form-group" style="margin-left: 190px">
+                            <label class="col-sm-2 control-label no-padding-right">机柜名称&nbsp;</label>
+                            <div class="col-sm-6 tooltip-info" data-rel="tooltip" data-placement="top">
+                                <input id="cab_name" name="cab_name" class="input-sm form-control" disabled="disabled"/>
+                            </div>
+                        </div>
+                        <div class="space-16"></div>
+                        <div class="form-group">
+                            <div class="col-md-offset-5 col-md-9">
+                                <button class="btn btn-success" type="button" id="btnSubmit">
+                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                    提交
+                                </button>
+                                <button class="btn" type="reset">
+                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="/static/js/chosen.jquery.min.js"></script>
+    <script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="/static/js/all-config.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
+    <script>
+        function updateCabName() {
+            var lab_num = $('#lab').val();
+            var lab = $('#lab').find("option:selected").text();
+            var cab_num = $('#cab_num').val();
+            if(lab_num=='-1'){
+                $('#cab_name').val("")
+            }else {
+                var val = lab + '_' + cab_num;
+                $('#cab_name').val(val)
+            }
+
+        }
+       $(function () {
+           $('#cab_num').keyup(function () {
+               updateCabName()
+           });
+           $('#btnSubmit').click(function () {
+               var cab_name = $('#cab_name').val();
+               if(cab_name==""){
+                   swal("机架名称不能为空");
+                   return;
+               }
+               $.ajax({
+                    url: "/cmdb/cab/saveInfo",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "cab_name": cab_name,
+                        "cab_desc": cab_name,
+                        "ci_type": "cab",
+                        "lab_id": $("#lab").val()
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                            return;
+                        }
+                        if (data.success){
+                            swal("新增成功");
+                        }else{
+                            swal(data.message);
+                        }
+                    }
+               });
+           })
+       })
+    </script>
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        人员关联研发组
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                姓名:{{ci.operator_name}}
+            </div>
+            <div class="col-xs-6">
+                域账号:{{ci.login_name}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                邮箱:{{ci.operator_email}}
+            </div>
+        </div>
+        <div class="navbar-header" style="margin-right: 18px;">
+            <span class="navbar-brand">业务线</span>
+        </div>
+        <div class="nav navbar-nav form-group">
+            <div class="navbar-form navbar-left">
+                <div class="form-group">
+                    <select id="bu_id" style="width:150px;" class="form-control" >
+                        {% for bu in bus %}
+                        <option value="{{bu._id}}">{{bu.bu_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-header" style="margin-right: 18px;">
+            <span class="navbar-brand">研发组</span>
+        </div>
+        <div class="nav navbar-nav form-group">
+            <div class="navbar-form navbar-left">
+                <div class="form-group">
+                    <select id="product_id" style="width:150px;" class="form-control">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-header" style="margin-right: 18px;">
+            <span class="navbar-brand">角色</span>
+        </div>
+        <div class="nav navbar-nav form-group">
+            <div class="navbar-form navbar-left">
+                <div class="form-group">
+                    <select id="user_role" style="width:150px;" class="select2 user-select2" data-placeholder="选择角色" >
+                        <option value="manage">研发线负责人</option>
+                        <option value="leader">研发组长</option>
+                        <option value="member">项目成员</option>
+                        <option value="tester">测试成员</option>
+                        <option value="product">产品经理</option>
+                    </select>
+                    <button class="btn btn-xs btn-success"
+                        onclick="createRole('{{ci.login_name}}')">新增角色</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 300px;">研发组名称</th>
+                            <th style="text-align: center;">角色</th>
+                            <th style="text-align: center; width: 195px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for first_ci in first_cis %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci.product_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{first_ci.relation_type|user_role}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showRelation({{first_ci._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="edit({{first_ci._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{first_ci._id}},{{ci_id}}, '{{ first_ci.relation_type }}')">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    操作日志
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px;">ID</th>
+                            <th style="text-align: center; width: 200px;">操作者</th>
+                            <th style="text-align: center; width: 120px;">操作类型</th>
+                            <th style="text-align: center; width: 150px;">操作时间</th>
+                            <th style="text-align: center;">详细信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.operator}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.command}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.create_time}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.content}}</div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="/static/js/select2.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script>
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=product&id=" + ciId);
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=product&id=" + ciId);
+    };
+    var createRole = function(user){
+        var saveData = {
+            'user': user,
+            'productId': $('#product_id').val(),
+            'role': $('#user_role').val()
+        };
+        $.ajax({
+            url: "/cmdb/operator/createUserWithRole",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var deleteRelation = function(first_id, second_id, role){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id,
+            'role_name': role
+        };
+        $.ajax({
+            url: "/cmdb/product/deleteRelation",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    };
+    var refresh_products = function(){
+        $.ajax({
+            url: "/cmdb/query/getAllSub",
+            type: "POST",
+
+            data: JSON.stringify({
+                "ci_id": $('#bu_id').val()
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    $( "#product_id").empty();
+                    for (var i = 0, l = data.data.length; i < l; i++) {
+                        var record = data.data[i];
+                        $("#product_id").append("<option value='" + record._id + "'>"
+                                + record.product_name + "</option>");
+                    }
+                }else{
+                    showDialog("查询失败", data.message);
+                }
+            }
+        });
+    };
+    var select2_option = {
+        ajax: {
+            url: "/cmdb/query/selectProject",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $("#new_project").select2(select2_option);
+    jQuery(function($){
+        $('#bu_id option:first').attr('selected','selected');
+        refresh_products();
+        $( "#bu_id" ).change(function() {
+            refresh_products();
+        });
+    });
+</script>
+{% endblock %}

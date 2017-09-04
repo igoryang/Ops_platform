@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        配置项新增（{{ci_name}}）
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div id="config" class="col-sm-12">
+                {{ci_config}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+<script>
+    function checkIp(ip) {
+        var regIps = /^(((25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|[0-9])\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|[0-9]))$/;
+        return regIps.test(ip);
+    }
+    var createInfo = function(){
+        var saveData = {};
+        $("#config :input").each(function(a,target){
+            var name = $(target).attr("name");//获取name属性
+            var value = $(target).val();
+            if (name != undefined) {
+                saveData[name] = value;
+            }
+        });
+        var ip = '';
+        if('vip' in saveData){
+            ip = saveData['vip'];
+        }
+        if('private_ip' in saveData){
+            ip = saveData['private_ip'];
+        }
+        if(ip){
+            var ret = checkIp(ip);
+            if(!ret){
+                swal('IP地址格式不正确');
+                return
+            }
+        }
+        $.ajax({
+            url: "/cmdb/ci/add/saveInfo",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    swal("新增成功");
+                }else{
+                    swal(data.message);
+                }
+            }
+        });
+    };
+
+    jQuery(function($){
+    });
+</script>
+{% endblock %}

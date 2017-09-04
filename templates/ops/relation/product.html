@@ -1,0 +1,365 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="page-header">
+    <h1>
+        研发组关联信息
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                研发组名称:{{ci.product_name}}
+            </div>
+            <div class="col-xs-6">
+                研发组负责人:{{ci.product_owner}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-6">
+                研发组负责人域账号:{{ci.product_owner_ldap}}
+            </div>
+            <div class="col-xs-6">
+                研发组负责人邮箱:{{ci.product_owner_email}}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    人员列表
+                </span>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <div class="navbar-header" style="margin-right: 18px;">
+                    <span class="navbar-brand">姓名</span>
+                </div>
+                <div class="nav navbar-nav form-group">
+                    <div class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <select id="newOperator" style="width:150px;" class="select2 user-select2 form-control" data-placeholder="搜索姓名">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-header" style="margin-right: 18px;">
+                    <span class="navbar-brand">角色</span>
+                </div>
+                <div class="nav navbar-nav form-group">
+                    <div class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <select id="user_role" style="width:150px;" class="select2" data-placeholder="选择角色" >
+                                <option value="manage">研发线负责人</option>
+                                <option value="leader">研发组长</option>
+                                <option value="member">项目成员</option>
+                                <option value="tester">测试成员</option>
+                                <option value="product">产品经理</option>
+                            </select>
+                            <button class="btn btn-xs btn-success"
+                                onclick="createRole({{ci_id}})">新增成员</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 100px;">姓名</th>
+                            <th style="text-align: center; width: 120px;">域账号</th>
+                            <th style="text-align: center; width: 120px;">角色</th>
+                            <th style="text-align: center;">邮箱</th>
+                            <th style="text-align: center; width: 195px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{user._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{user.operator_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{user.login_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{user.relation_type|user_role}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{user.operator_email}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showOperatorRelation({{user._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="editOperator({{user._id}})">编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteMemberRelation({{ci_id}},{{user._id}},'{{ user.relation_type }}')">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    应用列表
+                </span>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <select id="new_project" class="width-50 select2" data-placeholder="选择需要添加关联的系统别名" >
+                </select>
+                <button class="btn btn-xs btn-success"
+                    onclick="createRelation({{ci_id}})">新增关联</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 100px;">id</th>
+                            <th style="text-align: center; width: 300px;">系统别名</th>
+                            <th style="text-align: center;">应用描述</th>
+                            <th style="text-align: center; width: 120px;">开发负责人</th>
+                            <th style="text-align: center; width: 230px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for second_ci in second_cis %}
+                        <tr ng-repeat="record in records">
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci._id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.project_name}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.desc}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{second_ci.rd_duty}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">
+                                    <button class="btn btn-xs btn-success"
+                                        onclick="showRelation({{second_ci._id}})">关联关系</button>
+                                    <button class="btn btn-xs btn-primary"
+                                        onclick="edit({{second_ci._id}})">新增或编辑</button>
+                                    <button class="btn btn-xs btn-danger"
+                                        onclick="deleteRelation({{ci_id}},{{second_ci._id}})">删除关联</button>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12">
+                <span style="font-size: 20px;">
+                    操作日志
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-striped table-condensed"
+                    style="table-layout: fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px;">ID</th>
+                            <th style="text-align: center; width: 200px;">操作者</th>
+                            <th style="text-align: center; width: 120px;">操作类型</th>
+                            <th style="text-align: center; width: 150px;">操作时间</th>
+                            <th style="text-align: center;">详细信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.id}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.operator}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.command}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.create_time}}</div></td>
+                            <td><div style="text-align: center; white-space: nowrap;">{{log.content}}</div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/chosen.jquery.min.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="/static/js/select2.min.js"></script>
+<script src="/static/js/all-config.js"></script>
+<script>
+    var edit = function(ciId){
+        window.open("/cmdb/ci/edit?type=project&id=" + ciId);
+    };
+    var editOperator = function(ciId){
+        window.open("/cmdb/ci/edit?type=operator&id=" + ciId);
+    };
+    var showRelation = function(ciId){
+        window.open("/cmdb/relation?type=project&id=" + ciId);
+    };
+    var showOperatorRelation = function(ciId){
+        window.open("/cmdb/relation?type=operator&id=" + ciId);
+    };
+    var createRole = function(product_id){
+        var saveData = {
+            'productId': product_id,
+            'user': $('#newOperator').val(),
+            'role': $('#user_role').val()
+        };
+        $.ajax({
+            url: "/cmdb/operator/createUserWithRole",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var createRelation = function(first_id){
+        var saveData = {
+            'first_id': first_id,
+            'second_id': $('#new_project').val()
+        };
+        $.ajax({
+            url: "/cmdb/relation/create",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("新增关联失败");
+                }
+            }
+        });
+    };
+    var deleteMemberRelation = function(first_id, second_id, role){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id,
+            'role_name': role
+        };
+        $.ajax({
+            url: "/cmdb/product/deleteRelation",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    };
+    var deleteRelation = function(first_id, second_id){
+        ret = window.confirm("确认要删除关联关系?")
+        if (!ret) {
+            return;
+        }
+
+        var saveData = {
+            'first_id': first_id,
+            'second_id': second_id
+        };
+        $.ajax({
+            url: "/cmdb/relation/delete",
+            type: "POST",
+            data: JSON.stringify(saveData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                if (data.success){
+                    location.reload(true);
+                }else{
+                    alert("删除关联失败");
+                }
+            }
+        });
+    };
+    var select2_option = {
+        ajax: {
+            url: "/cmdb/query/selectProject",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $("#new_project").select2(select2_option);
+
+    var user_select2_option = {
+        ajax: {
+            url: "/util/user",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        allowClear: true,
+        minimumInputLength: 2
+    };
+    $(".user-select2").select2(user_select2_option);
+    delete user_select2_option['allowClear'];
+    jQuery(function($){
+    });
+</script>
+{% endblock %}
