@@ -1,7 +1,7 @@
 # Ops_platform
 ops_platform_django_arch
 
-# python 2.7.x  django 1.8.x 框架
+# python 2.7.x  django 1.8.x 框架  mysql 5.x  Bootstrap ACE后台管理界面模板(扁平化)-后台模板
 
 #1
 仪表盘
