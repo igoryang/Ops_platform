@@ -1,16 +1,16 @@
 # Ops_platform
 ops_platform_django_arch
 
-# python  django 框架
+# python 2.7.x  django 1.8.x 框架
 
-1
+#1
 仪表盘
 CMDB管理
 监控管理
 脚本管理
 网络管理
 自动化操作日志
-2
+#2
 IP管理
 资产管理
 主机管理
