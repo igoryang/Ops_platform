@@ -49,6 +49,7 @@ from django.utils.html import format_html  #设置字段颜色
 #         db_table = 'cis'
 #         verbose_name = verbose_name_plural = 'CIS'  # 表名称 别名 中文显示
 #         ordering = ['cis_id']
+#     #如果没有models.AutoField，默认会创建一个id的自增列
 #     cis_id = models.AutoField(max_length=11, db_column='cis_id', primary_key=True)
 #     type_id = models.IntegerField(max_length=11, db_column='type_id', blank=False)
 #     status = models.CharField(max_length=8, db_column='status', null=True, blank=True)
