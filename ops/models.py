@@ -55,6 +55,7 @@ from django.utils.html import format_html  #设置字段颜色
 #     created_time = models.DateTimeField(auto_now=True)
 #     # update_time = models.DateTimeField(default=datetime.now().replace(tzinfo=utc))
 #     heardbeat = models.DateTimeField(auto_now_add=True)
+#       sex = models.BooleanField(max_length=1,choices=((0,'男'),(1,'女'),))
 #     # color_code = models.CharField(max_length=6)
 #     #
 #     # def colored_name(self):  #字段颜色设置
