@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>订单管理系统</title>
+    <title>运维服务管理系统</title>
     <!--大迈仪器(Strider Instruments)-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- basic styles  -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/static/css/font-awesome.min.css"/>
-    <link href="/static/images/cat_favicon.ico" rel="shortcut icon">
+    <link href="/static/images/ali_favicon.ico" rel="shortcut icon">
 
     <!--[if IE 7]>
 		  <link rel="stylesheet" href="/static/css/font-awesome-ie7.min.css" />
@@ -54,7 +54,7 @@
             <a href="http://www.strider-tech.com/index.htm" class="navbar-brand">
                 <small>
                     <i class="icon-fire"></i>
-                    订单管理系统
+                    运维服务管理平台
                 </small>
                 <!--大迈仪器(Strider Instruments)-->
             </a><!-- /.brand -->
@@ -96,75 +96,51 @@
     <div class="main-container-inner">
         <div class="sidebar" id="sidebar">
             <ul class="nav nav-list">
-                <li {% if '/order_cmdb' in request.path %}class="active" {% endif %}>
+                <li {% if '/assets_management' in request.path %}class="active" {% endif %}>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-desktop"></i>
-                        <span class="menu-text"> 订单管理 </span>
+                        <span class="menu-text"> 资产管理 </span>
                         <b class="arrow icon-angle-down"></b>
                     </a>
 
                     <ul class="submenu">
-                        <li {% if request.path == '/order_cmdb/index' %}class="active" {% endif %}>
-                            <a href="/order_cmdb/index">
+                        <li {% if request.path == '/assets_management/index' %}class="active" {% endif %}>
+                            <a href="/assets_nmanagement/index">
                                 <i class="icon-double-angle-right"></i>
-                                订单管理
+                                资产管理
                             </a>
                         </li>
-                        <li {% if request.path == '/order_cmdb/orderaccount' %}class="active" {% endif %}>
+                        <li {% if request.path == '/assets_management/orderaccount' %}class="active" {% endif %}>
                             <a href=" ">
                                 <i class="icon-double-angle-right"></i>
-                               订单统计
+                               资产统计
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav nav-list">
-                <li {% if '/product' in request.path %}class="active" {% endif %}>
+                <li {% if '/hosts_management' in request.path %}class="active" {% endif %}>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-desktop"></i>
-                        <span class="menu-text"> 产品管理 </span>
+                        <span class="menu-text"> 主机管理 </span>
                         <b class="arrow icon-angle-down"></b>
                     </a>
 
                     <ul class="submenu">
-                        <li {% if request.path == '/product/index' %}class="active" {% endif %}>
-                            <a href="/product/index">
-                                <i class="icon-double-angle-right"></i>
-                                产品管理
-                            </a>
-                        </li>
-                        <li {% if request.path == '/product/account' %}class="active" {% endif %}>
+                        <li {% if request.path == '/hosts_management/vminstances' %}class="active" {% endif %}>
                             <a href=" ">
                                 <i class="icon-double-angle-right"></i>
-                                产品统计
+                                主机管理
                             </a>
                         </li>
-                    </ul>
-                </li>
-            </ul>
-                        <ul class="nav nav-list">
-                <li {% if '/customer' in request.path %}class="active" {% endif %}>
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-desktop"></i>
-                        <span class="menu-text"> 客户管理 </span>
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
-
-                    <ul class="submenu">
-                        <li {% if request.path == '/customer/vminstances' %}class="active" {% endif %}>
+                        <li {% if request.path == '/hosts_management/host' %}class="active" {% endif %}>
                             <a href=" ">
                                 <i class="icon-double-angle-right"></i>
-                                客户管理
+                                主机统计
                             </a>
                         </li>
-                        <li {% if request.path == '/customer/host' %}class="active" {% endif %}>
-                            <a href=" ">
-                                <i class="icon-double-angle-right"></i>
-                                客户统计
-                            </a>
-                        </li>
-                        <li {% if request.path == '/customer/help' %}class="active" {% endif %}>
+                        <li {% if request.path == '/hosts_management/help' %}class="active" {% endif %}>
                             <a href=" ">
                                 <i class="icon-double-angle-right"></i>
                                 帮助文档
@@ -173,6 +149,153 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav nav-list">
+                <li {% if '/user_management' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 用户管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/user_management/index' %}class="active" {% endif %}>
+                            <a href="/user_management/index">
+                                <i class="icon-double-angle-right"></i>
+                                用户管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/user_management/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                用户统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav nav-list">
+                <li {% if '/deployment' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 部署管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/deployment/index' %}class="active" {% endif %}>
+                            <a href="/deployment/index">
+                                <i class="icon-double-angle-right"></i>
+                                部署管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/deployment/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                部署统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav nav-list">
+                <li {% if '/database_management' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 数据库管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/database_management/index' %}class="active" {% endif %}>
+                            <a href="/database_management/index">
+                                <i class="icon-double-angle-right"></i>
+                                数据库管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/database_management/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                数据库统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-list">
+                <li {% if '/monitoring' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 监控管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/monitoring/index' %}class="active" {% endif %}>
+                            <a href="/product/index">
+                                <i class="icon-double-angle-right"></i>
+                                监控管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/monitoring/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                监控统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-list">
+                <li {% if '/networks' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 网络管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/networks/index' %}class="active" {% endif %}>
+                            <a href="/networks/index">
+                                <i class="icon-double-angle-right"></i>
+                                网络管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/networks/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                网络统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-list">
+                <li {% if '/log_management' in request.path %}class="active" {% endif %}>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text"> 日志管理 </span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li {% if request.path == '/log_management/index' %}class="active" {% endif %}>
+                            <a href="/log_management/index">
+                                <i class="icon-double-angle-right"></i>
+                                日志管理
+                            </a>
+                        </li>
+                        <li {% if request.path == '/log_management/account' %}class="active" {% endif %}>
+                            <a href=" ">
+                                <i class="icon-double-angle-right"></i>
+                                日志统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
             <div class="sidebar-collapse" id="sidebar-collapse">
                 <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
                    data-icon2="icon-double-angle-right"></i>

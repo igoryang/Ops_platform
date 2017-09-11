@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 """
 Django settings for Ops_platform project.
 
@@ -43,7 +44,7 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -76,20 +77,44 @@ WSGI_APPLICATION = 'Ops_platform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+#mysql setting
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'order',
+        'USER': 'root',
+        'PASSWORD': '123.abc',
+        'HOST': 'localhost',
+        'PORT': '3306',
+
     }
 }
+
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+#
+# TIME_ZONE = 'UTC'
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-hans'
+
+TIME_ZONE = 'Asia/Shanghai'
+# #admin界面汉化#默认admin后台管理界面是英文的，对英语盲来说用起来不方便。可以在settings.py中设置：
+# 1.8以前版本
+# LANGUAGE_CODE = 'zh-CN'
+# TIME_ZONE = 'Asia/Shanghai'
+# 1.8版本之后的language code设置不同：
+# LANGUAGE_CODE = 'zh-hans'
+# TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -102,3 +127,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+# Django  admin 使用suit 小记  suit.官网 http://djangosuit.com/
+# SUIT_CONFIG = {  # suit页面配置
+#     'ADMIN_NAME': '密码管理系统',  # 登录界面提示
+#     'LIST_PER_PAGE': 10,  # 分页,每页显示10条记录
+#     'MENU': (
+#         # 每一个字典表示左侧菜单的一栏
+#         {'label': '密码管理', 'app': 'app01', 'models': ('app01.PwdInfo',)},
+#              ),
+#     # label表示name，app表示上边的install的app，models表示用了哪些models
+# }
