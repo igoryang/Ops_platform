@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>json</title>
+</head>
+<body>
+
+<P>
+    josn实例<br />
+
+    {
+        "employees": [
+        { "firstName":"John" , "lastName":"Doe" },
+        { "firstName":"Anna" , "lastName":"Smith" },
+        { "firstName":"Peter" , "lastName":"Jones" }
+        ]
+    }
+</P><br />
+<p>
+JSON: JavaScript Object Notation(JavaScript 对象表示法)<br />
+
+JSON 是存储和交换文本信息的语法。类似 XML。<br />
+
+JSON 比 XML 更小、更快，更易解析。<br />
+
+JSON 指的是 JavaScript 对象表示法（JavaScript Object Notation）<br />
+JSON - 转换为 JavaScript 对象<br />
+
+与 XML 相同之处
+JSON 是纯文本
+JSON 具有"自我描述性"（人类可读）
+JSON 具有层级结构（值中存在值）
+JSON 可通过 JavaScript 进行解析
+JSON 数据可使用 AJAX 进行传输
+与 XML 不同之处<br />
+没有结束标签
+更短
+读写的速度更快
+能够使用内建的 JavaScript eval() 方法进行解析
+使用数组
+不使用保留字<br />
+为什么使用 JSON？<br />
+对于 AJAX 应用程序来说，JSON 比 XML 更快更易使用：
+
+使用 XML
+读取 XML 文档
+使用 XML DOM 来循环遍历文档
+读取值并存储在变量中
+使用 JSON
+读取 JSON 字符串
+用 eval() 处理 JSON 字符串<br />
+
+</p>
+<br />
+
+<p>
+JSON 语法是 JavaScript 语法的子集。<br />
+JSON 语法规则<br />
+JSON 语法是 JavaScript 对象表示法语法的子集。<br />
+
+数据在名称/值对中  "firstName" : "John"<br />
+数据由逗号分隔,<br />
+花括号保存对象{}<br />
+方括号保存数组[]<br />
+
+</p>
+<br />
+
+<h2>JSON Object Creation in JavaScript</h2>
+<p>
+    Name:<span id="jname"></span><br />
+    Age:<span id="jage"></span><br />
+    Address:<span id="jstreet"></span><br />
+    Phone:<span id="jphone"></span><br />
+
+</p>
+
+
+<br />
+<h2>Create Object from JSON String</h2>
+<p>
+First Name: <span id="fname"></span><br />
+Last Name: <span id="lname"></span><br />
+</p>
+
+
+<script>
+    var JSONObject={
+        "name":"Jonh king",
+        "street":"shanghai888",
+        "age":33,
+        "phone":"13xxxxxxx",
+    };
+    document.getElementById("jname").innerHTML=JSONObject.name
+    document.getElementById("jage").innerHTML=JSONObject.age
+    document.getElementById("jstreet").innerHTML=JSONObject.street
+    document.getElementById("jphone").innerHTML=JSONObject.phone
+
+
+    //    创建包含 JSON 语法的 JavaScript 字符串：var obj = eval ("(" + txt + ")");
+
+    var txt = '{ "employees" : [' +
+        '{ "firstName":"John" , "lastName":"Doe" },' +
+        '{ "firstName":"Anna" , "lastName":"Smith" },' +
+        '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+    ///var obj = eval ("(" + txt + ")");  ///eval() 函数使用的是 JavaScript 编译器，可解析 JSON 文本,这隐藏了一个潜在的安全问题。
+    obj = JSON.parse(txt); ///###JSON 解析器
+    document.getElementById("fname").innerHTML = obj.employees[1].firstName
+    document.getElementById("lname").innerHTML = obj.employees[1].lastName
+
+
+</script>
+<!--<script>-->
+    <!--var employees = [-->
+        <!--{ "firstName":"John" , "lastName":"Doe" },-->
+        <!--{ "firstName":"Anna" , "lastName":"Smith" },-->
+        <!--{ "firstName":"Peter" , "lastName": "Jones" }-->
+    <!--];-->
+<!--//    #employees[0].lastName;  访问   #Doe-->
+<!--//-->
+<!--//    #employees[0].firstName = "Jonatan"; 修改-->
+
+<!--</script>-->
+
+
+</body>
+</html>
