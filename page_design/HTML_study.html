@@ -2,9 +2,836 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+{#    <meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">#}
+{#    <meta name="description" content="Free Web tutorials on HTML and CSS">#}
+{#    <meta name="author" content="Hege Refsnes">#}
+{#    <meta http-equiv="refresh" content="30">#}
+    <title>Title--HTML_Study</title>
+
+{#<style type="text/css">#}
+{#body {background-color:yellow;}#}
+{#p {color:blue;}#}
+{#</style>#}
+
+
 </head>
 <body>
+<a href="http://code.ziqiangxuetang.com/html/html-tutorial.html"  target="_blank"> HTML_study
+<font size="5" face="华文彩云" color="#FF0000">进入</font></a>
+
+<xmp>
+<div style="opacity:0.5;position:absolute;left:50px;width:300px;height:150px;background-color:#40B3DF"></div>
+<div style="font-family:verdana;padding:20px;border-radius:10px;border:10px solid #EE872A;">
+<div style="opacity:0.3;position:absolute;left:120px;width:100px;height:200px;background-color:#8AC007"></div>
+<h3>Look! Styles and colors</h3>
+<div style="letter-spacing:12px;">Manipulate Text</div>
+<div style="color:#40B3DF;">Colors
+<span style="background-color:#B4009E;color:#ffffff;">Boxes</span>
+</div>
+<div style="color:#000000;">and more...</div>
+</div>
+
+<body style="background-color:yellow;">
+<h2 style="background-color:red;">This is a heading</h2>
+<p style="background-color:green;">This is a paragraph.</p>
+
+<h1 style="font-family:verdana;">A heading</h1>
+<p style="font-family:arial;color:red;font-size:20px;">A paragraph.</p>
+
+
+<h1 style="text-align:center;">Center-aligned heading</h1>
+<p>This is a paragraph.</p>
+</xmp>
+
+{#<h2>Norwegian Mountain Trip</h2>#}
+{#<img border="0" src="front001.png" alt="Pulpit XXX rock" width="304" height="228">#}
+
+<table border="1">
+<tr>
+<th>Header 1</th>
+<th>Header 2</th>
+</tr>
+<tr>
+<td>row 1, cell 1</td>
+<td>row 1, cell 2</td>
+</tr>
+<tr>
+<td>row 2, cell 1</td>
+<td>row 2, cell 2</td>
+</tr>
+</table>
+
+
+<ol>
+<li>Coffee</li>
+<li>Milk</li>
+</ol>
+
+<form>
+First name: <input type="text" name="firstname"><br>
+Last name: <input type="text" name="lastname">
+</form>
+
+<form>
+<input type="radio" name="sex" value="male">Male<br>
+<input type="radio" name="sex" value="female">Female
+</form>
+
+<form>
+<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+<input type="checkbox" name="vehicle" value="Car">I have a car
+</form>
+
+<form name="input" action="html_form_action.php" method="get">
+Username: <input type="text" name="user">
+<input type="submit" value="Submit">
+</form>
+
+<iframe src="demo_iframe.htm" width="200" height="200"></iframe>
+
+<p style="background-color:#FFFF00">
+通过十六进制设置背景颜色
+</p>
+<p style="background-color:rgb(255,255,0)">
+通过 rbg 值设置背景颜色
+</p>
+<p style="background-color:yellow">
+通过颜色名设置背景颜色
+</p>
+
+<br>
+<h1>我的第一个标题</h1>
+<hr>
+<h2>我的第二个标题</h2>
+<hr>
+<h3>我的第三个标题</h3>
+<hr>
+<h4>我的第四个标题</h4>
+<!-- 这是一个注释 -->
+<p>This is my first paragraph.</p>
+<br>
+<h3>文本格式化</h3>
+<b>This text is bold</b><br><br>
+<i>This text is italic</i><br><br>
+<b><i>This text is italic</i></b><br><br>
+<code>This is computer output</code><br><br>
+This is<sub> subscript</sub> and <sup> superscript</sup>
+<br>
+<br />
+<p>My favorite color is <del>blue</del> <ins>red</ins>!</p>
+
+<p>WWF's goal is to:
+<q>Build a future where people live in harmony with nature.</q>
+We hope they succeed.</p>
+
+
+<p>This paragraph will go left-to-right.</p>
+<p><bdo dir="rtl">This paragraph will go right-to-left.</bdo></p>
+
+<abbr title="etcetera">etc.</abbr>
+<br>
+<acronym title="World Wide Web">WWW</acronym>
+<p>在某些浏览器中，当您把鼠标移至缩略词语上时，title 可用于展示表达的完整版本。</p>
+<p>仅对于 IE 5 中的 acronym 元素有效。</p>
+<p>对于 Netscape 6.2 中的 abbr 和 acronym 元素都有效。</p>
+
+<address>
+Written by <a href="mailto:webmaster@example.com">Jon Doe</a>.<br>
+Visit us at:<br>
+Example.com<br>
+Box 564, Disneyland<br>
+USA
+</address>
+
+
+<code>Computer code</code>
+<br>
+<kbd>Keyboard input</kbd>
+<br>
+<tt>Teletype text</tt>
+<br>
+<samp>Sample text</samp>
+<br>
+<var>Computer variable</var>
+<br>
+<p>
+<b>注释：</b>这些标签常用于显示计算机/编程代码。
+</p>
+
+<pre>
+Text in a pre element
+is displayed in a fixed-width
+font, and it preserves
+both      spaces and
+line breaks
+</pre>
+
+
+
+
+<img src="front001.png" width="50" height="50">
+
+
+<a href="http://www.ziqiangxuetang.com/">这是一个链接</a>
+
+<a id="tips">Useful Tips Section</a>
+
+<a href="#tips">Visit the Useful Tips Section</a>
+
+
+<a href="http://www.ziqiangxuetang.com/html_links.htm#tips">
+Visit the Useful Tips Section</a>
+<br><br><br>
+<br />
+<br />
+
+
+
+
+
+<xmp>
+
+
+
+        HTML <head> 元素
+    <head> 元素包含了所有的头部标签元素。在 <head>元素中你可以插入脚本（scripts）, 样式文件（CSS），及各种meta信息。
+
+    可以添加在头部区域的元素标签为: <title>, <style>, <meta>, <link>, <script>, <noscript>, and <base>.
+
+    HTML <base> 元素
+    <base> 标签描述了基本的链接地址/链接目标，该标签作为HTML文档中所有的链接标签的默认链接:
+
+    <head>
+    <base href="http://www.ziqiangxuetang.com/images/" target="_blank">
+    </head>
+
+    <head>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    </head>
+
+
+{#    <head>#}
+{#    <style type="text/css">#}
+{#    body {background-color:yellow}#}
+{#    p {color:blue}#}
+{#    </style>#}
+{#    </head>#}
+
+    HTML <meta> 元素
+    meta标签描述了一些基本的元数据。
+
+    <meta> 标签提供了元数据.元数据也不显示在页面上，但会被浏览器解析。
+
+    META元素通常用于指定网页的描述，关键词，文件的最后修改时间，作者，和其他元数据。
+
+    元数据可以使用浏览器（如何显示内容或重新加载页面），搜索引擎（关键词），或其他Web服务。
+
+    <meta>一般放置于 <head>区域
+
+    <meta> 标签- 使用实例
+    为搜索引擎定义关键词:
+
+    <meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">
+    为网页定义描述内容:
+
+    <meta name="description" content="Free Web tutorials on HTML and CSS">
+    定义网页作者:
+
+    <meta name="author" content="Hege Refsnes">
+    每30秒 刷新一次当前页面:
+
+    <meta http-equiv="refresh" content="30">
+
+
+    HTML <script> 元素
+    <script>标签用于加载脚本文件，如： JavaScript.
+
+    <script> 元素在以下章节会详细描述
+    ==================================================
+    HTML-CSS
+    HTML 样式标签
+    标签	描述
+    <style>	定义文本样式
+    <link>	定义资源引用地址
+    已弃用的标签和属性
+    在HTML 4, 原来支持定义HTML元素样式的标签和属性已被弃用。这些标签将不支持新版本的HTML标签。
+
+    不建议使用的标签有: <font>, <center>, <strike>
+
+    不建议使用的属性: color 和 bgcolor.
+    ========================================================
+    HTML 图像- 图像标签（ <img>）和源属性（Src）
+    在 HTML 中，图像由<img> 标签定义。
+
+    <img> 是空标签，意思是说，它只包含属性，并且没有闭合标签。
+
+    要在页面上显示图像，你需要使用源属性（src）。src 指 "source"。源属性的值是图像的 URL 地址。
+
+    定义图像的语法是：
+
+    <img src="url" alt="some_text">
+
+     =======================================
+                        ============================================================
+
+标签	描述
+<head>	定义了文档的信息
+<title>	定义了文档的标题
+<base>	定义了页面链接标签的默认链接地址
+<link>	定义了一个文档和外部资源之间的关系
+<meta>	定义了HTML文档中的元数据
+<script>	定义了客户端的脚本文件
+<style>	定义了HTML文档的样式文件
+
+
+
+<br>
+<p>
+    我的第一个段落
+    xxxxxxxxxxx,
+    xxxxxxxxxxx.
+    <br>
+    HTML 提示：使用小写标签
+HTML 标签对大小写不敏感：<P> 等同于 <p>。许多网站都使用大写的 HTML 标签。
+
+自强学堂 使用的是小写标签，因为万维网联盟（W3C）在 HTML 4 中推荐使用小写，而在未来 (X)HTML 版本中强制使用小写。
+</p>
+<pre>
+<p>
+实例解析
+DOCTYPE 声明了文档类型
+位于标签  <html>  </html> 描述了文档类型
+位于标签  <body>  </body> 为可视化网页内容
+位于标签  <h1>  </h1> 作为一个标题使用
+位于标签  <p>  </p> 作为一个段落显示
+<!DOCTYPE html> 在HTML5中也是描述了文档类型。
+
+</p>
+</pre>
+<pre>
+<p>
+    什么是HTML?
+HTML 是用来描述网页的一种语言。
+
+HTML 指的是超文本标记语言: Hyper Text Markup Language
+HTML 不是一种编程语言，而是一种标记语言
+标记语言是一套标记标签 (markup tag)
+HTML 使用标记标签来描述网页
+HTML 文档包含了HTML 标签及文本内容
+HTML文档也叫做 web 页面
+
+</p>
+</pre>
+<p>
+    HTML 标签
+HTML 标记标签通常被称为 HTML 标签 (HTML tag)。
+
+HTML 标签是由尖括号包围的关键词，比如 <html>
+HTML 标签通常是成对出现的，比如 <b> 和 </b>
+标签对中的第一个标签是开始标签，第二个标签是结束标签
+开始和结束标签也被称为开放标签和闭合标签
+
+</p>
+ <br /> <br />
+
+<p>
+    HTML版本
+从初期的网络诞生后，已经出现了许多HTML版本:
+
+版本	发布时间
+HTML	1991
+HTML+	1993
+HTML 2.0	1995
+HTML 3.2	1997
+HTML 4.01	1999
+XHTML 1.0	2000
+HTML5	2012
+XHTML5	2013
+
+</p>
+<br />
+
+<p>
+
+    共同声明
+HTML5
+<!DOCTYPE html>
+HTML 4.01
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+XHTML 1.0
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+</p>
+
+<pre>
+    HTML 文本格式化标签
+标签	描述
+<b>	定义粗体文本
+<em>	定义着重文字
+<i>	定义斜体字
+<small>	定义小号字
+<strong>	定义加重语气
+<sub>	定义下标字
+<sup>	定义上标字
+<ins>	定义插入字
+<del>	定义删除字
+HTML "计算机输出" 标签
+标签	描述
+<code>	定义计算机代码
+<kbd>	定义键盘码
+<samp>	定义计算机代码样本
+<var>	定义变量
+<pre>	定义预格式文本
+HTML 引文, 引用, 及标签定义
+标签	描述
+<abbr>	定义缩写
+<address>	定义地址
+<bdo>	定义文字方向
+<blockquote>	定义长的引用
+<q>	定义短的引用语
+<cite>	定义引用、引证
+<dfn>	定义一个定义项目。
+
+
+</pre>
+
+</xmp>
+
+<xmp>
+    HTML 链接语法
+链接的 HTML 代码很简单。它类似这样：:
+
+<a href="url">Link text</a>
+
+    示:"链接文本" 不必一定是文本。图片或其他 HTML 元素都可以成为链接。
+    <a href="http://www.ziqiangxuetang.com/" target="_blank">Visit ZiQiangXueTang!</a>
+
+    在HTML文档中插入ID:
+
+<a id="tips">Useful Tips Section</a>
+在HTML文档中创建一个链接到"有用的提示部分(id="tips"）"：
+
+<a href="#tips">Visit the Useful Tips Section</a>
+或者，从另一个页面创建一个链接到"有用的提示(id="tips"）部分"：
+
+<a href="http://www.ziqiangxuetang.com/html_links.htm#tips">
+Visit the Useful Tips Section</a>
+
+HTML 表格标签
+标签	描述
+<table>	定义表格
+<th>	定义表格的表头
+<tr>	定义表格的行
+<td>	定义表格单元
+<caption>	定义表格标题
+<colgroup>	定义表格列的组
+<col>	定义用于表格列的属性
+<thead>	定义表格的页眉
+<tbody>	定义表格的主体
+<tfoot>	定义表格的页脚
+
+列表
+<ol>
+<li>Coffee</li>
+<li>Milk</li>
+</ol>
+HTML 列表标签
+标签	描述
+<ol>	定义有序列表
+<ul>	定义无序列表
+<li>	定义列表项
+<dl>	定义定义列表
+<dt>	自定义列表项目
+<dd>	定义自定列表义的描述
+
+HTML <div> 元素
+HTML <div> 元素是块级元素，它是可用于组合其他 HTML 元素的容器。
+HTML <span> 与元素
+HTML <span> 元素是内联元素，可用作文本的容器
+
+<span> 元素也没有特定的含义。
+
+当与 CSS 一同使用时，<span> 元素可用于为部分文本设置样式属性。
+HTML 分组标签
+标签	描述
+<div>	定义了文档的区域，块级 (block-level)
+<span>	用来组合文档中的行内元素， 内联元素(inline)
+
+
+HTML 布局 - 使用<div> 元素
+div 元素是用于分组 HTML 元素的块级元素。
+
+下面的例子使用五个 div 元素来创建多列布局：
+
+
+HTML 框架
+« HTML 表单 HTML 颜色 »
+通过使用框架，你可以在同一个浏览器窗口中显示不止一个页面。
+
+<iframe src="demo_iframe.htm" width="200" height="200"></iframe>
+iframe语法:
+
+<iframe src="URL"></iframe>
+
+HTML 颜色由红色、绿色、蓝色混合而成。
+HTML 颜色由一个十六进制符号来定义，这个符号由红色、绿色和蓝色的值组成（RGB）。
+
+种颜色的最小值是0（十六进制：#00）。最大值是255（十六进制：#FF）1600万种不同颜色。
+#000000	rgb(0,0,0)
+#FF0000	rgb(255,0,0)
+#00FF00	rgb(0,255,0)
+        HTML 颜色名
+« HTML 颜色 HTML 颜色值 »
+目前所有浏览器都支持以下颜色名。
+141个颜色名称是在HTML和CSS颜色规范定义的（17标准颜色，再加124）。下表列出了所有颜色的值，包括十六进制值。
+
+Remark提示: 17标准颜色：黑色，蓝色，水，紫红色，灰色，绿色，石灰，栗色，海军，橄榄，橙，紫，红，白，银，蓝绿色，黄色。点击其中一个颜色名称（或一个十六进制值）就可以查看与不同文字颜色搭配的背景颜色。：
+
+HTML 颜色值
+« HTML 颜色名 HTML 脚本 »
+通过十六进制（Hex）的颜色值排序
+
+Color Name	HEX	Color
+Black 	#000000
+Navy 	#000080
+DarkBlue 	#00008B
+MediumBlue 	#0000CD
+
+HTML 脚本
+« HTML 颜色值 HTML 字符实体 »
+JavaScript 使 HTML 页面具有更强的动态和交互性。
+<script>
+document.write("Hello World!")
+</script>
+
+
+HTML 脚本标签s
+标签	描述
+<script>	定义了客户端脚本
+<noscript>	定义了不支持脚本浏览器输出的文本
+
+
+HTML 字符实体
+« HTML 脚本 HTML URL »
+HTML 中的预留字符必须被替换为字符实体。
+
+一些在键盘上找不到的字符也可以使用字符实体来替换。
+
+HTML 实体
+在 HTML 中，某些字符是预留的。
+
+在 HTML 中不能使用小于号（<）和大于号（>），这是因为浏览器会误认为它们是标签。
+
+如果希望正确地显示预留字符，我们必须在 HTML 源代码中使用字符实体（character entities）。 字符实体类似这样：
+
+&entity_name;
+或
+
+&#entity_number;
+如需显示小于号，我们必须这样写：&lt; 或 &#60; 或 <
+HTML字符实体
+备注: 实体名称对大小写敏感！
+
+显示结果	描述	实体名称	实体编号
+ 	空格	&nbsp;	&#160;
+<	小于号	&lt;	&#60;
+>	大于号	&gt;	&#62;
+&	和号	&amp;	&#38;
+"	引号	&quot;	&#34;
+'	撇号 	&apos; (IE不支持)	&#39;
+￠	分	&cent;	&#162;
+£	镑	&pound;	&#163;
+¥	日圆	&yen;	&#165;
+€	欧元	&euro;	&#8364;
+§	小节	&sect;	&#167;
+©	版权	&copy;	&#169;
+®	注册商标	&reg;	&#174;
+™	商标	&trade;	&#8482;
+×	乘号	&times;	&#215;
+÷	除号	&divide;	&#247;
+
+HTML URL
+« HTML 字符实体 HTML 速查列表 »
+URL是一个网页地址。
+
+URL可以由字母组成，如"ziqiangxuetang.com"，或互联网协议（IP）地址： 192.68.20.50。大多数人进入网站使用网站域名来访问，因为 名字比数字更容易记住。
+
+URL - 统一资源定位符（Uniform Resource Locator)
+Web浏览器通过URL从Web服务器请求页面。
+
+当您点击 HTML 页面中的某个链接时，对应的 <a> 标签指向万维网上的一个地址。
+
+一个统一资源定位器(URL) 用于定位万维网上的文档。
+
+一个网页地址实例: http://www.ziqiangxuetang.com/html/html-tutorial.html 语法规则:
+
+scheme://host.domain:port/path/filename
+以下是一些URL scheme：
+
+Scheme	访问	用于...
+http	超文本传输协议	以 http:// 开头的普通网页。不加密。
+https	安全超文本传输协议	安全网页。解密所有信息交换。
+ftp	文件传输协议	用于将文件下载或上传至网站。
+file	 	您计算机上的文件。
+
+
+URL 字符编码
+URL 只能使用 ASCII 字符集.
+
+来通过因特网进行发送。由于 URL 常常会包含 ASCII 集合之外的字符，URL 必须转换为有效的 ASCII 格式。
+
+URL 编码使用 "%" 其后跟随两位的十六进制数来替换非 ASCII 字符。
+
+URL 不能包含空格。URL 编码通常使用 + 来替换空格。
+
+URL 编码实例
+字符	URL 编码
+€	%80
+£	%A3
+©	%A9
+®	%AE
+À	%C0
+Á	%C1
+Â	%C2
+Ã	%C3
+Ä	%C4
+Å	%C5
+
+
+===================================================================
+HTML 速查列表
+« HTML URL HTML 总结 »
+HTML 速查列表. 你可以可以打印它，以备日常使用。
+
+HTML基本文档（HTML Basic Document）
+<!DOCTYPE html>
+<html>
+<head>
+<title>Title of document goes here</title>
+</head>
+
+<body>
+Visible text goes here...
+</body>
+</html>
+
+基本标签(Basic Tags)
+<h1>Largest Heading</h1>
+<h2> . . . </h2>
+<h3> . . . </h3>
+<h4> . . . </h4>
+<h5> . . . </h5>
+<h6>Smallest Heading</h6>
+
+<p>This is a paragraph.</p>
+<br> (line break)
+<hr> (horizontal rule)
+<!-- This is a comment -->
+文本格式化（Formatting）
+<b>Bold text</b>
+<code>Computer code</code>
+<em>Emphasized text</em>
+<i>Italic text</i>
+<kbd>Keyboard input</kbd>
+<pre>Preformatted text</pre>
+<small>Smaller text</small>
+<strong>Important text</strong>
+
+<abbr> (abbreviation)
+<address> (contact information)
+<bdo> (text direction)
+<blockquote> (a section quoted from another source)
+<cite> (title of a work)
+<del> (deleted text)
+<ins> (inserted text)
+<sub> (subscripted text)
+<sup> (superscripted text)
+链接（Links）
+Ordinary link: <a href="http://www.example.com/">Link-text goes here</a>
+Image-link: <a href="http://www.example.com/"><img src="URL" alt="Alternate Text"></a>
+Mailto link: <a href="mailto:webmaster@example.com">Send e-mail</a>
+Bookmark:
+<a id="tips">Tips Section</a>
+<a href="#tips">Jump to the Tips Section</a>
+
+图片（Images）
+<img src="URL" alt="Alternate Text" height="42" width="42">
+样式（Styles/Sections）
+<style type="text/css">
+  h1 {color:red;}
+  p {color:blue;}
+</style>
+
+<div>A block-level section in a document</div>
+<span>An inline section in a document</span>
+Unordered list
+<ul>
+  <li>Item</li>
+  <li>Item</li>
+</ul>
+Ordered list
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+</ol>
+Definition list
+<dl>
+  <dt>Item 1</dt>
+    <dd>Describe item 1</dd>
+  <dt>Item 2</dt>
+    <dd>Describe item 2</dd>
+</dl>
+Tables
+<table border="1">
+  <tr>
+    <th>table header</th>
+    <th>table header</th>
+  </tr>
+  <tr>
+    <td>table data</td>
+    <td>table data</td>
+  </tr>
+</table>
+
+框架（Iframe）
+<iframe src="demo_iframe.htm"></iframe>
+
+表单（Forms）
+<form action="demo_form.asp" method="post/get">
+<input type="text" name="email" size="40" maxlength="50">
+<input type="password">
+<input type="checkbox" checked="checked">
+<input type="radio" checked="checked">
+<input type="submit" value="Send">
+<input type="reset">
+<input type="hidden">
+<select>
+<option>Apples</option>
+<option selected="selected">Bananas</option>
+<option>Cherries</option>
+</select>
+
+<textarea name="comment" rows="60" cols="20"></textarea>
+
+</form>
+
+Entities
+&lt; is the same as <
+&gt; is the same as >
+© is the same as ©
+« HTML URL HTML 总结 »
+自强学堂订阅号二维码
+关注微信，随时查教程，提升自己！
+
+
+        ================================================================================================
+
+
+HTML 总结
+« HTML 速查列表 XHTML 简介 »
+HTML 总结
+本教程已教你如何使用 HTML 创建站点。
+
+HTML 是一种在 Web 上使用的通用标记语言。HTML 允许你格式化文本，添加图片，创建链接、输入表单、框架和表格等等，并可将之存为文本文件，浏览器即可读取和显示。
+
+HTML 的关键是标签，其作用是指示将出现的内容。
+
+如需更多关于 HTML 的信息，请查看我们的 HTML 教程 和 HTML 参考手册 。
+
+现在，你已学完HTML，接下来该学习什么呢？
+学习 CSS
+CSS被用来同时控制多重网页的样式和布局。
+
+通过使用 CSS，所有的格式化均可从 HTML 中剥离出来，并存储于一个独立的文件中。
+
+通过使用 CSS，所有的格式化均可从 HTML 中剥离出来，并存储于一个独立的文件中。
+
+如需学习如何创建样式表，请访问我们的 CSS 教程 。
+
+学习 JavaScript
+JavaScript 可以让你的网页更加生动。
+
+如果你只想展示内容，静态网站是很好的展示形象，如果你想与用户进行交换或者让网页更加生动那就需要使用到Javascript。
+
+JavaScript是互联网上最流行的脚本语言，目前所有主流浏览器都支持Javascript。
+
+如果你想学习更多关于Javascript的知识，可以访问本站的JavaScript 教程.
+
+站点服务器
+在自己的服务器上托管网站始终是一个选项。有几点需要考虑：
+
+硬件支出
+如果要运行"真正"的网站，您不得不购买强大的服务器硬件。不要指望低价的 PC 能够应付这些工作。您还需要稳定的（一天 24 小时）高速连接。
+
+软件支出
+请记住，服务器授权通常比客户端授权更昂贵。同时请注意，服务器授权也许有用户数量限制。
+
+人工费
+不要指望低廉的人工费用。您必须安装自己的硬件和软件。您同时要处理漏洞和病毒，以确保您的服务器时刻正常地运行于一个"任何事都可能发生"的环境中。
+
+使用因特网服务提供商（ISP）
+从 ISP 租用服务器也很常见。
+
+大多数小公司会把网站存放到由 ISP 提供的服务器上。其优势有以下几点：
+
+连接速度
+大多数 ISP 都拥有连接因特网的高速连接。
+
+强大的硬件
+ISP 的 web 服务器通常强大到能够由若干网站分享资源。您还要看一下 ISP 是否提供高效的负载平衡，以及必要的备份服务器。
+
+安全性和可靠性
+ISP 是网站托管方面的专家。他们应该提供 99% 以上的在线时间，最新的软件补丁，以及最好的病毒防护。
+
+选择 ISP 时的注意事项
+24 小时支持
+确保 ISP 提供 24 小时支持。不要使自己置于无法解决严重问题的尴尬境地，同时还必须等待第二个工作日。如果您不希望支付长途电话费，那么免费电话服务也是必要的。
+
+每日备份
+确保 ISP 会执行每日备份的例行工作，否则您有可能损失有价值的数据。
+
+流量
+研究一下 ISP 的流量限制。如果出现由于网站受欢迎而激增的不可预期的访问量，那么您要确保不会因此支付额外费用。
+
+带宽或内容限制
+研究一下 ISP 的带宽和内容限制。如果您计划发布图片或播出视频或音频，请确保您有此权限。
+
+E-mail 功能
+请确保 ISP 支持您需要的 e-mail 功能。
+
+数据库访问
+如果您计划使用网站数据库中的数据，那么请确保您的 ISP 支持您需要的数据库访问。
+
+在您选取一家 ISP 之前，请务必阅读 W3School 的 Web 主机教程。
+
+=======================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</xmp>
+
 
 </body>
+
+<script>
+document.write("Hello World!");
+        document.write("<p>This is a paragraph</p>");
+        <button type="button" onclick="myFunction()">Click Me!</button>;
+        document.getElementById("demo").style.color="#ff0000";
+
+</script>
+
 </html>
